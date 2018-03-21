@@ -1,8 +1,8 @@
 package agollo
 
 import (
+	"github.com/go-apollo/agollo/test"
 	"testing"
-	"github.com/zouyx/agollo/test"
 )
 
 func TestStart(t *testing.T) {
@@ -13,5 +13,5 @@ func TestStart(t *testing.T) {
 	Start()
 
 	value := getValue("key1")
-	test.Equal(t,"value1",value)
+	test.Equal(t, "value1", value)
 }

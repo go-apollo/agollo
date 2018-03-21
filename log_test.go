@@ -2,7 +2,7 @@ package agollo
 
 import (
 	"testing"
-	"github.com/cihub/seelog"
+	// "github.com/cihub/seelog"
 )
 
 func TestInitNullSeeLog(t *testing.T) {

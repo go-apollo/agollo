@@ -3,52 +3,53 @@ package agollo
 import (
 	"testing"
 	"time"
-	"github.com/zouyx/agollo/test"
+
+	"github.com/go-apollo/agollo/test"
 )
 
 func TestRequestRecovery(t *testing.T) {
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 	mockIpList(t)
 	go runMockConfigBackupServer(normalBackupConfigResponse)
 	defer closeAllMockServicesServer()
 
-	appConfig:=GetAppConfig()
-	urlSuffix:=getConfigUrlSuffix(appConfig)
+	appConfig := GetAppConfig()
+	urlSuffix := getConfigUrlSuffix(appConfig)
 
-	o,err:=requestRecovery(appConfig,&ConnectConfig{
-		Uri:urlSuffix,
-	},&CallBack{
-		SuccessCallBack:autoSyncConfigServicesSuccessCallBack,
+	o, err := requestRecovery(appConfig, &ConnectConfig{
+		Uri: urlSuffix,
+	}, &CallBack{
+		SuccessCallBack: autoSyncConfigServicesSuccessCallBack,
 	})
 
-	test.Nil(t,err)
-	test.Nil(t,o)
+	test.Nil(t, err)
+	test.Nil(t, o)
 }
 
 func TestCustomTimeout(t *testing.T) {
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 	mockIpList(t)
 	go runMockConfigBackupServer(longTimeResponse)
 	defer closeAllMockServicesServer()
 
 	startTime := time.Now().Second()
-	appConfig:=GetAppConfig()
-	urlSuffix:=getConfigUrlSuffix(appConfig)
+	appConfig := GetAppConfig()
+	urlSuffix := getConfigUrlSuffix(appConfig)
 
-	o,err:=requestRecovery(appConfig,&ConnectConfig{
-		Uri:urlSuffix,
-		Timeout:11*time.Second,
-	},&CallBack{
-		SuccessCallBack:autoSyncConfigServicesSuccessCallBack,
+	o, err := requestRecovery(appConfig, &ConnectConfig{
+		Uri:     urlSuffix,
+		Timeout: 11 * time.Second,
+	}, &CallBack{
+		SuccessCallBack: autoSyncConfigServicesSuccessCallBack,
 	})
 
 	endTime := time.Now().Second()
-	t.Log("starttime:",startTime)
-	t.Log("endTime:",endTime)
-	t.Log("duration:",endTime-startTime)
-	test.Equal(t,10,endTime-startTime)
-	test.Nil(t,err)
-	test.Nil(t,o)
+	t.Log("starttime:", startTime)
+	t.Log("endTime:", endTime)
+	t.Log("duration:", endTime-startTime)
+	test.Equal(t, 10, endTime-startTime)
+	test.Nil(t, err)
+	test.Nil(t, o)
 }
 
 //func TestErrorRequestRecovery(t *testing.T) {
@@ -73,11 +74,11 @@ func TestCustomTimeout(t *testing.T) {
 func mockIpList(t *testing.T) {
 	go runMockServicesServer(normalServicesResponse)
 	defer closeMockServicesServer()
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 
-	err:=syncServerIpList()
+	err := syncServerIpList()
 
-	test.Nil(t,err)
+	test.Nil(t, err)
 
-	test.Equal(t,2,len(servers))
+	test.Equal(t, 2, len(servers))
 }
